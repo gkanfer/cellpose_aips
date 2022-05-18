@@ -129,13 +129,14 @@ class AIPS_cellpose:
         )
         return table_prop
 
-    def display_image_prediction(self,img ,prediction_table, font_select, font_size, windows=False):
+    def display_image_prediction(self,img ,prediction_table, font_select, font_size, windows=False, lable_draw = 'predict',round_n = 2):
         '''
         ch: 16 bit input image
         mask: mask for labale
-        lable_draw: 'label' or 'area'
+        lable_draw: 'predict' or 'area'
         font_select: copy font to the working directory ("DejaVuSans.ttf" eg)
         font_size: 4 is nice size
+        round_n: integer how many number after decimel
 
         return:
         info_table: table of objects measure
@@ -146,9 +147,14 @@ class AIPS_cellpose:
         PIL_image = Image.fromarray(img_gs)
         # round
         info_table = prediction_table.round({'centroid-0': 0, 'centroid-1': 0})
-        info_table['predict_round'] = info_table.loc[:, 'predict'].astype(float).round(2)
+        info_table['predict_round'] = info_table.loc[:, 'predict'].astype(float).round(round_n)
+        info_table['area_round'] = info_table.loc[:, 'area'].astype(float).round(round_n)
         info_table = info_table.reset_index(drop=True)
         draw = ImageDraw.Draw(PIL_image)
+        if lable_draw == 'predict':
+            lable = 4
+        else:
+            lable = 5
         # use a bitmap font
         if windows:
             font = ImageFont.truetype("arial.ttf", font_size, encoding="unic")
@@ -156,7 +162,7 @@ class AIPS_cellpose:
             font = ImageFont.truetype(font_select, font_size)
         for i in range(len(info_table)):
             draw.text((info_table.iloc[i, 2].astype('int64'), info_table.iloc[i, 1].astype('int64')),
-                      str(info_table.iloc[i, 4]), 'red', font=font)
+                      str(info_table.iloc[i, lable]), 'red', font=font)
         return info_table, PIL_image
 
 

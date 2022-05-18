@@ -31,6 +31,12 @@ git push origin -f cellpose_win10_0.2
 
 fail
 # make new master branch
+45 git init
+46 git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+47 git commit -m "first commit"
+48 git branch -M main
+49 git remote add origin https://github.com/gkanfer/cellpose_aips.git
+50 git push -u origin main
 
 
 

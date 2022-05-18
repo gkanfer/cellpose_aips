@@ -33,7 +33,9 @@ test VGG16 augmentation and including argumentation and transfer learning classi
 ############ cnn_transfer_learning_Augmentation_drop_layer_4and5 ##########################
 
 '''
-
+# laod model
+os.chdir(r'F:\HAB_2\PrinzScreen\training_classfication\models')
+cnn_transfer_learning_Augmentation_drop_layer_4and5 = load_model('cnn_transfer_learning_Augmentation_drop_layer_4and5.h5')
 
 # load images from mix library
 
@@ -46,7 +48,7 @@ img = AIPS_pose_object.cellpose_image_load()
 # create mask for the entire image
 mask, table = AIPS_pose_object.cellpose_segmantation(image_input=img[0,:,:])
 
-table["prediction"] = 'Na'
+table["predict"] = 'Na'
 test = []
 for i in range(len(table)):
     stack, stack_v = AIPS_pose_object.stackObjects_cellpose_ebimage_parametrs_method(image_input=img[0,:,:],
@@ -64,84 +66,60 @@ for i in range(len(table)):
         ))
         test = np.array(test)
         pred = cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test, verbose=0).tolist()[0][0]
-        table.loc[i,"prediction"] = pred
+        table.loc[i,"predict"] = pred
+
+plt.imshow(im_pil)
+
+
+# remove nas
+table_na_rmv = table.loc[table['predict']!='Na',:]
+#
+predict = np.where(table_na_rmv.loc[:,'predict'] > 0, 1, 0)
+table_na_rmv = table_na_rmv.assign(predict = predict)
+# remove small area
+table_na_rmv = table_na_rmv.loc[table['area'] > 3000,:]
 
 
 
+# get mask
+compsite_object = AFD.Compsite_display(input_image=img[0,:,:],mask_roi=mask)
+comp_img = compsite_object.draw_ROI_contour()
+plt.imshow(comp_img)
 
 
 
+table_pred, impil = AIPS_pose_object.display_image_prediction(img = comp_img ,prediction_table = table_na_rmv,
+                                                              font_select = None, font_size = 14, windows=True,  lable_draw = 'area',round_n = 30)
+plt.imshow(impil)
 
+stack, stack_v = AIPS_pose_object.stackObjects_cellpose_ebimage_parametrs_method(image_input=img[0, :, :],
+                                                                                 extract_pixel=50, resize_pixel=150,
+                                                                                 img_label=table.index.values[42])
+plt.imsave("test_ind42.png", stack)
+test_imgs  = img_to_array(load_img("test_ind42.png", target_size=(150,150)))
+test_imgs = np.array(test_imgs)
+test_imgs_scaled = test_imgs.astype('float32')
+test_imgs_scaled /= 255
+plt.imshow(test_imgs_scaled)
 
-os.chdir(r'F:\HAB_2\PrinzScreen\training_classfication\models')
-cnn_transfer_learning_Augmentation_drop_layer_4and5 = load_model('cnn_transfer_learning_Augmentation_drop_layer_4and5.h5')
-predictions = cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test, verbose=0)
-
-
-
-
-
-
-
-
-
-
-import numpy as np
-from scipy.stats import skew
-from skimage import data, util
-from skimage import measure
-
-
-def sd_intensity(regionmask, intensity_image):
-    return np.std(intensity_image[regionmask])
-
-
-def skew_intensity(regionmask, intensity_image):
-    return skew(intensity_image[regionmask])
-
-def pixelcount(regionmask):
-    return np.sum(regionmask)
-
-def mean_int(regionmask, intensity_image):
-    return np.mean(intensity_image[regionmask])
+cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test_imgs_scaled.reshape(1,150,150,3), verbose=0).tolist()[0][0]
 
 
 
-prop_names = [
-    "label",
-    "area",
-    "eccentricity",
-    "euler_number",
-    "extent",
-    "feret_diameter_max",
-    "inertia_tensor",
-    "inertia_tensor_eigvals",
-    "moments",
-    "moments_central",
-    "moments_hu",
-    "moments_normalized",
-    "orientation",
-    "perimeter",
-    "perimeter_crofton",
-    # "slice",
-    "solidity"
-]
-table_prop = measure.regionprops_table(mask, img[0,:100,:100], properties=prop_names, extra_properties=(sd_intensity, skew_intensity,pixelcount , mean_int) )
-tesdt = pd.DataFrame(table_prop)
+stack_8 = (stack / np.max(stack)) * 255
+stack_ub = stack.astype(np.uint8)
+im_pil =  np.array(Image.fromarray(stack_ub).convert('RGB'))
+plt.imshow(im_pil)
+test_imgs = np.array(im_pil)
+test_imgs_scaled = test_imgs.astype('float32')
+test_imgs_scaled /= 255
+plt.imshow(test_imgs_scaled)
+cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test_imgs_scaled.reshape(1,150,150,3), verbose=0).tolist()[0][0]
 
 
-
-
-
-# create mask for first label
-stack,stack_v = AIPS_pose_object.stackObjects_cellpose_ebimage_parametrs_method(image_input = img[0,:,:], extract_pixel = 50, resize_pixel = 150, img_label = table.index.values[0])
-
-#display compsite with outline
-# comp_img = AFD.Compsite_display(input_image = img[0,:200,:200] , mask_roi = mask[0:200,0:200]).draw_ROI_contour()
-# plt.imshow(comp_img)
-
-i=23
-print("stack {}  image image name {}".format(i, images_name[0]))
-
-table.to_csv("test.csv")
-
+test = []
+test.append(tf.convert_to_tensor(
+    im_pil, dtype=np.float32, dtype_hint=None, name=None
+))
+test = np.array(test)
+pred = cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test, verbose=0).tolist()[0][0]
