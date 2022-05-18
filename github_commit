@@ -1,0 +1,37 @@
+
+firstc upolad
+git init
+git add utils/.
+git commit -m "042822"
+git remote add origin  https://github.com/gkanfer/AI_PS_Python.git
+git branch –f cellpose_win10
+
+
+git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051722"
+git push origin -f cellpose_win10
+
+git add run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051822"
+git push origin -f cellpose_win10
+
+Fail
+
+git checkout -b "cellpose_win10_ver0.2"
+git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051822"
+git push origin -f cellpose_win10_ver0.2
+
+fail
+git add run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051822 cellpose_win10_0.2"
+git remote add origin  https://github.com/gkanfer/AI_PS_Python.git
+git branch -m cellpose_win10_0.2
+git push origin -f cellpose_win10_0.2
+
+fail
+# make new master branch
+
+
+
+
