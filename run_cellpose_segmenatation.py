@@ -70,9 +70,9 @@ for i in range(len(table)):
 # remove nas
 table_na_rmv = table.loc[table['predict']!='Na',:]
 #
-# predict = np.where(table_na_rmv.loc[:,'predict'] > 0.5, 1, 0)
-# table_na_rmv = table_na_rmv.assign(predict = predict)
-# remove small area
+predict = np.where(table_na_rmv.loc[:,'predict'] > 0.5, 1, 0)
+table_na_rmv = table_na_rmv.assign(predict = predict)
+#remove small area
 table_na_rmv = table_na_rmv.loc[table['area'] > 1500,:]
 
 
@@ -88,4 +88,19 @@ table_pred, impil = AIPS_pose_object.display_image_prediction(img = comp_img ,pr
                                                               font_select = None, font_size = 14, windows=True,  lable_draw = 'predict',round_n = 3)
 plt.imshow(impil)
 
+## get only the mask of the postive structure
+fig, ax = plt.subplots(1, 2, figsize=(26, 26))
+ax[0].imshow(impil)
+ax[1].imshow(mask)
 
+# keep only target
+table_na_rmv_trgt =table_na_rmv.loc[table_na_rmv['predict'] > 0.5,:]
+x, y = table_na_rmv_trgt.loc[table_na_rmv_trgt.index[0], ["centroid-0", "centroid-1"]]
+from skimage.draw import disk
+img_mask = np.zeros((np.shape(img[0,:,:])[0],np.shape(img[0,:,:])[1]), dtype=np.uint8)
+row, col = disk((int(y),int(x)), 20)
+img_mask[row, col] = 1
+fig, ax = plt.subplots(1, 3, figsize=(26, 26))
+ax[0].imshow(impil)
+ax[1].imshow(mask)
+ax[2].imshow(img_mask)

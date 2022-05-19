@@ -2,35 +2,24 @@
 AIPS program for calling pex phenotype
 Segmentation: cell pose
 calling: transfer learning VGG16 with augmentation
-'''
 
-import numpy as np
+
+NIS-elementas outproc command:
+
+@echo on
+call D:\Gil\anaconda_gil\Scripts\activate.bat
+call activate py37
+call python D:\Gil\AIPS\Activate_nuclus\example_image\run_aips_batch.py
+@pause
+
+'''
 import time, os, sys
-from urllib.parse import urlparse
-import skimage.io
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from urllib.parse import urlparse
-from cellpose import models, core
-use_GPU = core.use_gpu()
-print('>>> GPU activated? %d'%use_GPU)
-# call logger_setup to have output of cellpose written
-from cellpose.io import logger_setup
-from cellpose import utils
-import tensorflow as tf
-from tensorflow import keras
-import glob
-import pandas as pd
-import re
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array, array_to_img
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
-from skimage import io, filters, measure, color, img_as_ubyte
-
+import tifffile as tfi
 from utils import AIPS_cellpose as AC
-from utils import AIPS_file_display as AFD
 
 if (__name__ == "__main__"):
     import argparse
@@ -43,6 +32,8 @@ if (__name__ == "__main__"):
                         help="The name of the model")
     parser.add_argument('--path_model', dest='path_model', type=str, required=True,
                         help="The path to the model")
+    parser.add_argument('--path_out', dest='path_out', type=str, required=True,
+                        help="The path to saver binary files for upload")
     args = parser.parse_args()
     #upload model
     model_cnn  = load_model(os.path.join(args.path_model,args.model))
@@ -70,8 +61,12 @@ if (__name__ == "__main__"):
             table.loc[i,"predict"] = pred
     # remove nas
     table_na_rmv = table.loc[table['predict']!='Na',:]
-    #
+    # threshold for selected cells is 0.5
     # predict = np.where(table_na_rmv.loc[:,'predict'] > 0.5, 1, 0)
     # table_na_rmv = table_na_rmv.assign(predict = predict)
-    # remove small area
+    # remove area smaller then 1500
     table_na_rmv = table_na_rmv.loc[table['area'] > 1500,:]
+    ##### binary image contains the phnotype of intrse #####
+    image_blank = np.zeros((np.shape(img[0,:,:])[0],np.shape(img[0,:,:])[1]))
+    binary, table_sel = AIPS_pose_object.call_bin(table_sel_cor = table_na_rmv, threshold = 0.5 ,img_blank = image_blank)
+    tfi.imsave(os.path.join(args.path_out, 'binary.tif'), binary)

@@ -15,6 +15,7 @@ from scipy.stats import skew
 
 from PIL import Image, ImageEnhance, ImageDraw,ImageFont
 from skimage import io, filters, measure, color, img_as_ubyte
+from skimage.draw import disk
 
 class AIPS_cellpose:
     def __init__(self, Image_name=None, path=None, image = None, mask = None, table = None, model_type = None, channels = None ):
@@ -165,6 +166,20 @@ class AIPS_cellpose:
                       str(info_table.iloc[i, lable]), 'red', font=font)
         return info_table, PIL_image
 
+    def call_bin(self,table_sel_cor, threshold ,img_blank):
+        '''
+        :parameter:
+        table_sel_cor: pandas table contain the center coordinates
+        threshold: thershold for predict phenotype (e.g. 0.5)
+        img_blank: blank image in the shape of the input image
+        :return: binary image of the called masks, table_sel
+        '''
+        table_na_rmv_trgt = table_sel_cor.loc[table_sel_cor['predict'] > threshold, :]
+        for z in range(len(table_na_rmv_trgt)):
+            x, y = table_na_rmv_trgt.loc[table_na_rmv_trgt.index[z],["centroid-0", "centroid-1"]]
+            row, col = disk((int(x), int(x)), 20)
+            img_blank[row, col] = 1
+        return img_blank, table_na_rmv_trgt
 
 
 
