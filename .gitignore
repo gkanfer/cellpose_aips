@@ -1,0 +1,7 @@
+.raw/
+.temp/
+.test_data/
+.traindata/
+*.png
+*.tif
+*.h5
