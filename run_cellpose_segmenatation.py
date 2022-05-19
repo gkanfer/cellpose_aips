@@ -43,7 +43,7 @@ path_norm = r'F:\HAB_2\PrinzScreen\training_classfication\raw\mix\selected_image
 os.chdir(path_norm)
 images_name = glob.glob("*.tif")
 
-AIPS_pose_object = AC.AIPS_cellpose(Image_name = images_name[0], path= path_norm, model_type="cyto", channels=[0,0])
+AIPS_pose_object = AC.AIPS_cellpose(Image_name = images_name[1], path= path_norm, model_type="cyto", channels=[0,0])
 img = AIPS_pose_object.cellpose_image_load()
 # create mask for the entire image
 mask, table = AIPS_pose_object.cellpose_segmantation(image_input=img[0,:,:])
@@ -57,27 +57,23 @@ for i in range(len(table)):
     if stack is None:
         continue
     else:
-        stack_8 = (stack / np.max(stack)) * 255
-        stack_ub = stack_8.astype(np.uint8)
-        im_pil = Image.fromarray(stack_ub).convert('RGB')
-        test = []
-        test.append(tf.convert_to_tensor(
-            im_pil, dtype=np.float32, dtype_hint=None, name=None
-        ))
-        test = np.array(test)
-        pred = cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test, verbose=0).tolist()[0][0]
+        plt.imsave("temp.png", stack)
+        test_imgs = img_to_array(load_img("temp.png", target_size=(150, 150)))
+        test_imgs = np.array(test_imgs)
+        # test_imgs_scaled = test_imgs.astype('float32')
+        test_imgs_scaled = test_imgs
+        test_imgs_scaled /= 255
+        pred = cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test_imgs_scaled.reshape(1, 150, 150, 3),
+                                                                    verbose=0).tolist()[0][0]
         table.loc[i,"predict"] = pred
-
-plt.imshow(im_pil)
-
 
 # remove nas
 table_na_rmv = table.loc[table['predict']!='Na',:]
 #
-predict = np.where(table_na_rmv.loc[:,'predict'] > 0, 1, 0)
-table_na_rmv = table_na_rmv.assign(predict = predict)
+# predict = np.where(table_na_rmv.loc[:,'predict'] > 0.5, 1, 0)
+# table_na_rmv = table_na_rmv.assign(predict = predict)
 # remove small area
-table_na_rmv = table_na_rmv.loc[table['area'] > 3000,:]
+table_na_rmv = table_na_rmv.loc[table['area'] > 1500,:]
 
 
 
@@ -89,37 +85,7 @@ plt.imshow(comp_img)
 
 
 table_pred, impil = AIPS_pose_object.display_image_prediction(img = comp_img ,prediction_table = table_na_rmv,
-                                                              font_select = None, font_size = 14, windows=True,  lable_draw = 'area',round_n = 30)
+                                                              font_select = None, font_size = 14, windows=True,  lable_draw = 'predict',round_n = 3)
 plt.imshow(impil)
 
-stack, stack_v = AIPS_pose_object.stackObjects_cellpose_ebimage_parametrs_method(image_input=img[0, :, :],
-                                                                                 extract_pixel=50, resize_pixel=150,
-                                                                                 img_label=table.index.values[42])
-plt.imsave("test_ind42.png", stack)
-test_imgs  = img_to_array(load_img("test_ind42.png", target_size=(150,150)))
-test_imgs = np.array(test_imgs)
-test_imgs_scaled = test_imgs.astype('float32')
-test_imgs_scaled /= 255
-plt.imshow(test_imgs_scaled)
 
-cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test_imgs_scaled.reshape(1,150,150,3), verbose=0).tolist()[0][0]
-
-
-
-stack_8 = (stack / np.max(stack)) * 255
-stack_ub = stack.astype(np.uint8)
-im_pil =  np.array(Image.fromarray(stack_ub).convert('RGB'))
-plt.imshow(im_pil)
-test_imgs = np.array(im_pil)
-test_imgs_scaled = test_imgs.astype('float32')
-test_imgs_scaled /= 255
-plt.imshow(test_imgs_scaled)
-cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test_imgs_scaled.reshape(1,150,150,3), verbose=0).tolist()[0][0]
-
-
-test = []
-test.append(tf.convert_to_tensor(
-    im_pil, dtype=np.float32, dtype_hint=None, name=None
-))
-test = np.array(test)
-pred = cnn_transfer_learning_Augmentation_drop_layer_4and5.predict(test, verbose=0).tolist()[0][0]

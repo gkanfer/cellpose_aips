@@ -4,6 +4,7 @@ from skimage.filters import threshold_local
 from scipy.ndimage.morphology import binary_opening,binary_erosion
 import skimage.morphology as sm
 from skimage.segmentation import watershed
+from skimage import io, exposure, data
 from skimage import measure
 import os
 import pandas as pd
