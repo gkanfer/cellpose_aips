@@ -21,6 +21,8 @@ print('>>> GPU activated? %d'%use_GPU)
 from cellpose.io import logger_setup
 from cellpose import utils
 
+print(pm.__version__)
+
 import tensorflow as tf
 from tensorflow import keras
 

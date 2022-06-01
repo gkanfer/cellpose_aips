@@ -48,6 +48,8 @@ img = AIPS_pose_object.cellpose_image_load()
 # create mask for the entire image
 mask, table = AIPS_pose_object.cellpose_segmantation(image_input=img[0,:,:])
 
+
+
 table["predict"] = 'Na'
 test = []
 for i in range(len(table)):
