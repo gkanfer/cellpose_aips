@@ -7,4 +7,9 @@ git push origin -f windows_nikon
 
 git add . 
 git commit -m  "Add github push instraction file" 
-git push origin -u AIPS_win10_python 
+git push origin -u windows_nikon
+
+git add .
+git commit -m  "script counting nucs"
+git push origin -u windows_nikon
+ 

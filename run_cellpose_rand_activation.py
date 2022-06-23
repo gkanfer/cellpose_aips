@@ -52,6 +52,12 @@ if os.path.exists(os.path.join(path_out, 'binary.tif')):
     os.remove(os.path.join(path_out, 'binary.tif'))
 tfi.imsave(os.path.join(path_out, 'binary.tif'), img_gs)
 
+with open(os.path.join(path_out, 'cell_count.txt'), 'r') as f:
+    prev_number = f.readlines()
+new_value = int(prev_number[0]) + len(table_na_rmv)
+with open(os.path.join(path_out, 'cell_count.txt'), 'w') as f:
+    f.write(str(new_value))
+
 
 #
 # if os.path.exists(os.path.join(path_out, 'binary.jpg')):
