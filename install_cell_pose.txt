@@ -1,0 +1,14 @@
+cuda 10.1
+
+conda create -n cellpose python=3.6.9 pytorch=1.8.2 cudatoolkit=10 -c pytorch-lts
+conda activate cellpose
+pip install cellpose
+pip install tensorflow-gpu==2.3.0
+
+conda install -c conda-forge matplotlib 
+conda install pandas 
+conda install scikit-image 
+conda install -c anaconda pillow 
+pip install "h5py==2.10.0" --force-reinstall
+
+

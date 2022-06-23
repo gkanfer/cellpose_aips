@@ -1,0 +1,1 @@
+--file input.tif --path D:\Gil\AIPS\Activate_nuclus\example_image\ --path_out D:\Gil\AIPS\Activate_nuclus\binary

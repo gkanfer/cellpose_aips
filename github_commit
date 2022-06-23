@@ -1,0 +1,51 @@
+
+firstc upolad
+git init
+git add utils/.
+git commit -m "042822"
+git remote add origin  https://github.com/gkanfer/AI_PS_Python.git
+git branch –f cellpose_win10
+
+
+git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051722"
+git push origin -f cellpose_win10
+
+git add run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051822"
+git push origin -f cellpose_win10
+
+Fail
+
+git checkout -b "cellpose_win10_ver0.2"
+git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051822"
+git push origin -f cellpose_win10_ver0.2
+
+fail
+git add run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+git commit -m "051822 cellpose_win10_0.2"
+git remote add origin  https://github.com/gkanfer/AI_PS_Python.git
+git branch -m cellpose_win10_0.2
+git push origin -f cellpose_win10_0.2
+
+fail
+# make new master branch
+45 git init
+46 git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py
+47 git commit -m "first commit"
+48 git branch -M main
+49 git remote add origin https://github.com/gkanfer/cellpose_aips.git
+50 git push -u origin main
+
+git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py draft.py run_aips_cellpose.py
+git commit -m "051922"
+git branch -M main
+git push -u origin main
+
+git add utils run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py draft.py run_aips_cellpose.py
+git commit -m "051922"
+git branch -M main
+git push -u origin main
+
+

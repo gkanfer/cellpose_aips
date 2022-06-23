@@ -1,0 +1,16 @@
+
+(cellpose) D:\Gil\AIPS\cellpose\cellpose_aips-main>call activate D:\Gil\anaconda_gil\envs\cellpose 
+
+(cellpose) D:\Gil\AIPS\cellpose\cellpose_aips-main>call python D:\Gil\AIPS\cellpose\cellpose_aips-main\run_cellpose_rand_activation.py  
+creating new log file
+2022-06-17 13:01:02,339 [INFO] WRITING LOG OUTPUT TO C:\Users\Youle Lab\.cellpose\run.log
+2022-06-17 13:01:05,625 [INFO] ** TORCH CUDA version installed and working. **
+2022-06-17 13:01:05,633 [INFO] ** TORCH CUDA version installed and working. **
+2022-06-17 13:01:05,633 [INFO] >>>> using GPU
+2022-06-17 13:01:05,723 [INFO] ~~~ ESTIMATING CELL DIAMETER(S) ~~~
+2022-06-17 13:01:18,722 [INFO] estimated cell diameter(s) in 13.00 sec
+2022-06-17 13:01:18,722 [INFO] >>> diameter(s) = 
+2022-06-17 13:01:18,722 [INFO] [ 55.95 ]
+2022-06-17 13:01:18,722 [INFO] ~~~ FINDING MASKS ~~~
+2022-06-17 13:01:23,265 [INFO] >>>> TOTAL TIME 17.54 sec
+Press any key to continue . . . 
