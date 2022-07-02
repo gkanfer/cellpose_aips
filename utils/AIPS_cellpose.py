@@ -16,6 +16,8 @@ from scipy.stats import skew
 from PIL import Image, ImageEnhance, ImageDraw,ImageFont
 from skimage import io, filters, measure, color, img_as_ubyte
 from skimage.draw import disk
+from skimage import measure, restoration,morphology
+
 
 class AIPS_cellpose:
     def __init__(self, Image_name=None, path=None, image = None, mask = None, table = None, model_type = None, channels = None ):
@@ -107,6 +109,7 @@ class AIPS_cellpose:
 
         prop_names = [
             "label",
+            "centroid",
             "area",
             "eccentricity",
             "euler_number",
