@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import seaborn as sns
-
+import skimage.io
 from cellpose import models, core
 use_GPU = core.use_gpu()
 print('>>> GPU activated? %d'%use_GPU)
@@ -51,5 +51,16 @@ for i in range(1, len(open_vec)):
     table_gran[str(open_vec[i]) + '_mean_int'] = table_gran_temp['mean_int'].tolist()
 
 
+# the differance between pex and SG
+
+path_norm = r'F:\HAB_2\PrinzScreen\training_classfication\raw\mix\selected_images'
+os.chdir(path_norm)
+images_name = glob.glob("*.tif")
+image = skimage.io.imread(os.path.join(path_norm,images_name[1]))
+
+path_tif = r'E:\Elliot\classification\data\tif\mix_ask_elliot'
+os.chdir(path_tif)
+images_name = glob.glob("*.tif")
+image_sg = skimage.io.imread(os.path.join(path_tif,images_name[1]))
 
 
