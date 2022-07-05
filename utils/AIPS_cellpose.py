@@ -133,7 +133,7 @@ class AIPS_cellpose:
         )
         return table_prop
 
-    def display_image_prediction(self,img ,prediction_table, font_select, font_size, windows=False, lable_draw = 'predict',round_n = 2):
+    def display_image_prediction(self,img ,prediction_table, font_select = "DejaVuSans.ttf", font_size = 4, windows=False, lable_draw = 'predict',round_n = 2):
         '''
         ch: 16 bit input image
         mask: mask for labale
@@ -155,18 +155,18 @@ class AIPS_cellpose:
         info_table['area_round'] = info_table.loc[:, 'area'].astype(float).round(round_n)
         info_table = info_table.reset_index(drop=True)
         draw = ImageDraw.Draw(PIL_image)
-        if lable_draw == 'predict':
-            lable = 4
+        if lable_draw ==  'predict':
+            lable = 'predict_round'
         else:
-            lable = 5
+            lable = 'area_round'
         # use a bitmap font
         if windows:
             font = ImageFont.truetype("arial.ttf", font_size, encoding="unic")
         else:
             font = ImageFont.truetype(font_select, font_size)
         for i in range(len(info_table)):
-            draw.text((info_table.iloc[i, 2].astype('int64'), info_table.iloc[i, 1].astype('int64')),
-                      str(info_table.iloc[i, lable]), 'red', font=font)
+            draw.text((info_table.loc[i, 'centroid-1'].astype('int64'), info_table.loc[i, 'centroid-0'].astype('int64')),
+                      str(info_table.loc[i, lable]), 'red', font=font)
         return info_table, PIL_image
 
     def call_bin(self,table_sel_cor, threshold ,img_blank):
