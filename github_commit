@@ -77,3 +77,8 @@ git add utils notebooks Bayse_cellpose_tf.py run_cellpose_segmenatation.py Fetur
 git commit -m "071622"
 git branch -M main
 git push -u origin main
+
+git add utils notebooks Bayse_cellpose_tf.py run_cellpose_segmenatation.py Feturer_calculation.py github_commit single_cell_using_cellpose.py test_GPU.py VGG16_TL_test.py draft.py run_aips_cellpose.py
+git commit -m "071822 multivariant factory model"
+git branch -M main
+git push -u origin main

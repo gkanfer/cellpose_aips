@@ -1,0 +1,12 @@
+conda create -c conda-forge -n pymc4_cellpose "pymc>=4"
+conda activate pymc4_cellpose 
+conda install -c pytorch-lts pytorch=1.8.2 cudatoolkit=10
+pip install cellpose
+pip install "h5py==2.10.0" --force-reinstall 
+conda install -c anaconda numpy=1.21
+conda install -c conda-forge matplotlib
+conda install pandas
+conda install scikit-image
+conda install -c anaconda pillow
+conda install -c anaconda scikit-learn 
+#conda install h5py
